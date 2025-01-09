@@ -5,77 +5,27 @@
     <title>智控 - 浏览器办公 #4 3行 2列 - 编辑动作</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-    <style>
-        /* 样式保持不变 */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            height: 100vh;
-        }
-        .left-sidebar { width: 300px; background-color: #f0f0f0; border-right: 1px solid #ccc; display: flex; flex-direction: column; }
-        .resizer {
-            width: 5px;
-            cursor: ew-resize;
-            background-color: #ccc;
-            height: 100vh;
-        }
-        .main-content { flex: 1; display: flex; flex-direction: column; }
-        /* 其他样式保持不变 */
-        .top-tabs { display: flex; border-bottom: 1px solid #ccc; }
-        .top-tab { padding: 10px; cursor: pointer; flex: 1; text-align: center; font-size: 12px; }
-        .top-tab:nth-child(1) { background-color: #4CAF50; color: white; }
-        .top-tab:nth-child(2) { background-color: #2196F3; color: white; }
-        .top-tab:nth-child(3) { background-color: #FFC107; color: black; }
-        .top-tab:nth-child(4) { background-color: #FF5722; color: white; }
-        .bottom-section { display: none; } /* 默认隐藏 */
-        .active { display: flex; } /* 添加active类时显示 */
-        .button-sidebar { width: 50px; background-color: #e0e0e0; padding: 5px; display: flex; flex-direction: column; }
-        .button-sidebar button { width: 40px; height: 40px; margin-bottom: 5px; border: none; background-color: #f0f0f0; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 18px; }
-        .module-list { flex: 1; overflow-y: auto; padding: 10px; display: none; }
-        .module-item { padding: 5px; margin-bottom: 5px; cursor: move; font-size: 12px; background-color: #fff; border: 1px solid #ccc; border-radius: 3px; display: flex; align-items: center; }
-        .module-item i { margin-right: 5px; }
-        .module-filter { width: 97%;}
-        .top-bar { background-color: #f8f8f8; padding: 5px; border-bottom: 1px solid #ccc; }
-        .tab-bar { display: flex; background-color: #fff; padding: 5px; border-bottom: 1px solid #ccc; overflow-x: auto; white-space: nowrap; }
-        .tab { padding: 5px 10px; margin-right: 5px; background-color: #f0f0f0; border: 1px solid #ccc; border-radius: 3px 3px 0 0; font-size: 12px; display: flex; align-items: center; cursor: pointer; }
-        .tab.active { background-color: #fff; border-bottom: 1px solid #fff; }
-        .tab .close-icon { margin-left: 5px; font-size: 10px; color: #999; }
-        .editor { flex: 1; padding: 10px; background-color: white; min-height: 100px; border: 1px dashed #ccc; }
-        .tab-content { padding: 10px 0; display: none; }
-        .tab-content.active { display: block; }
-        .right-sidebar { width: 200px; background-color: #f8f8f8; border-left: 1px solid #ccc; padding: 10px; font-size: 12px; display: flex; flex-direction: column; }
-        .parameter-actions { display: flex; justify-content: space-between; margin-bottom: 10px; position: relative; }
-        .parameter-actions button { padding: 3px 8px; font-size: 10px; background-color: #f0f0f0; border: 1px solid #ccc; border-radius: 3px; cursor: pointer; }
-        .parameter-list { color: #0066cc; margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px; max-height: 200px; overflow-y: auto; }
-        .parameter-list div { cursor: pointer; padding: 5px; }
-        .parameter-list div.selected { background-color: #e0e0e0; }
-        .tab-container { margin-top: 10px; }
-        .tab-buttons { display: flex; border-bottom: 1px solid #ccc; }
-        .tab-button { padding: 5px 10px; background-color: #f0f0f0; border: 1px solid #ccc; border-bottom: none; cursor: pointer; }
-        .tab-button.active { background-color: #fff; }
-        .right-sidebar-buttons { border-top: 1px solid #ccc; padding-top: 10px; margin-top: 10px; display: flex; flex-wrap: wrap; justify-content: center;}
-        .right-sidebar-buttons button { border: none; background: none; padding: 5px; margin: 2px; cursor: pointer; font-size: 14px; color: #666; }
-        .editor-item { display: flex; align-items: center; margin-bottom: 5px; }
-        .editor-item button { margin-left: 10px; }
-
-        /* 新增样式 */
-        .content-wrapper { display: flex; flex: 1; }
-        .editor-container { display: flex; flex-direction: column; flex: 1; }
-        .right-sidebar-container { display: flex; }
-        .dropdown { display: none; position: absolute; background-color: white; border: 1px solid #ccc; border-radius: 4px; z-index: 1; }
-        .dropdown-item { padding: 8px; cursor: pointer; }
-        .dropdown-item:hover { background-color: #f0f0f0; }
-        .dropdown-button { position: relative; }
-    </style>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
     <div class="left-sidebar">
         <div class="top-tabs">
-            <div class="top-tab active" data-section="1" title="动作模块"><i class="fas fa-cog"></i></div>
-            <div class="top-tab" data-section="2" title="动作内子程序"><i class="fas fa-cube"></i></div>
-            <div class="top-tab" data-section="3" title="公共子程序"><i class="fas fa-cube"></i></div>
-            <div class="top-tab" data-section="4" title="网络共享子程序"><i class="fas fa-cube"></i></div>
+            <div class="top-tab active" data-section="1" aria-label="动作模块" title="">
+                <i class="fas fa-cog"></i>
+                <span>动作模块</span>
+            </div>
+            <div class="top-tab" data-section="2" aria-label="动作内子程序" title="">
+                <i class="fas fa-code-branch"></i>
+                <span>动作内子程序</span>
+            </div>
+            <div class="top-tab" data-section="3" aria-label="公共子程序" title="">
+                <i class="fas fa-share-alt"></i>
+                <span>公共子程序</span>
+            </div>
+            <div class="top-tab" data-section="4" aria-label="网络共享子程序" title="">
+                <i class="fas fa-cloud"></i>
+                <span>网络共享子程序</span>
+            </div>
         </div>
 
         <div class="bottom-section" data-section="1" style="display: flex;">
@@ -149,19 +99,7 @@
         <div class="tab-bar">
             <div class="tab active" data-content="1">
                 主程序
-                <span class="close-icon"><i class="fas fa-times"></i></span>
-            </div>
-            <div class="tab" data-content="2">
-                对话模式
-                <span class="close-icon"><i class="fas fa-times"></i></span>
-            </div>
-            <div class="tab" data-content="3">
-                发送
-                <span class="close-icon"><i class="fas fa-times"></i></span>
-            </div>
-            <div class="tab" data-content="4">
-                B站笔记
-                <span class="close-icon"><i class="fas fa-times"></i></span>
+                </span>
             </div>
         </div>
 
@@ -169,36 +107,57 @@
             <div class="editor-container">
                 <div class="top-bar">
                     <label for="step" style="margin-right: 10px;">主程序步骤:</label>
-                    <input id="step" type="text" placeholder="" style="width: 80%;">
-                    <button data-modules="section1" title="执行动作"><i class="fas fa-play"></i></button>
-                    <button data-modules="section2" title="上一步"><i class="fas fa-undo"></i></button>
-                    <button data-modules="section3" title="下一步"><i class="fas fa-redo"></i></button>
-                    <button data-modules="section4" title="保存版本"><i class="fas fa-save"></i></button>
-                    <button data-modules="section5" title="历史版本"><i class="fas fa-history"></i></button>
+                    <input id="filter-step" type="text" placeholder="" style="width: 80%;">
+                    <button data-modules="section1" aria-label="执行动作" title="">
+                        <i class="fas fa-play"></i>
+                        <span>执行动作</span>
+                    </button>
+                    <button data-modules="section2" aria-label="上一步" title="">
+                        <i class="fas fa-undo"></i>
+                        <span>上一步</span>
+                    </button>
+                    <button data-modules="section3" aria-label="下一步" title="">
+                        <i class="fas fa-redo"></i>
+                        <span>下一步</span>
+                    </button>
+                    <button data-modules="section4" aria-label="保存版本" title="">
+                        <i class="fas fa-save"></i>
+                        <span>保存版本</span>
+                    </button>
+                    <button data-modules="section5" aria-label="历史版本" title="">
+                        <i class="fas fa-history"></i>
+                        <span>历史版本</span>
+                    </button>
                 </div>
-                <div class="editor" id="editor">
-                    <div class="tab-content active" id="content-1">主程序内容</div>
-                    <div class="tab-content" id="content-2">对话模式内容</div>
-                    <div class="tab-content" id="content-3">发送内容</div>
-                    <div class="tab-content" id="content-4">B站笔记内容</div>
-                </div>
+                <div class="tab-content active" id="content-1"><div class="editor" id="editor"></div></div>
             </div>
 
             <div class="right-sidebar-container">
                 <div class="right-sidebar">
                     <div class="parameter-actions">
-                        <button id="add-btn"><i class="fas fa-plus"></i> 添加</button>
-                        <!-- 排序和筛选功能 -->
+                        <button id="add-btn" aria-label="添加" title="">
+                            <i class="fas fa-plus"></i>
+                            <span>添加</span>
+                        </button>
                         <div class="dropdown-button">
-                            <button id="sort-btn"><i class="fas fa-sort"></i> 排序</button>
+                            <button id="sort-btn" aria-label="排序" title="">
+                                <i class="fas fa-sort"></i>
+                                <span>排序</span>
+                            </button>
                             <div class="dropdown" id="sort-dropdown">
                                 <div class="dropdown-item" data-sort="name">名称</div>
                                 <div class="dropdown-item" data-sort="type">类型</div>
                                 <div class="dropdown-item" data-sort="tag-name">标签</div>
                             </div>
                         </div>
-                        <button id="filter-btn"><i class="fas fa-filter"></i> 筛选</button>
-                        <button id="delete-btn"><i class="fas fa-trash-alt"></i> 删除</button>
+                        <button id="filter-btn" aria-label="筛选" title="">
+                            <i class="fas fa-filter"></i>
+                            <span>筛选</span>
+                        </button>
+                        <button id="delete-btn" aria-label="删除" title="">
+                            <i class="fas fa-trash-alt"></i>
+                            <span>删除</span>
+                        </button>
                     </div>
                     <input type="text" id="filter-input" class="filter-input" placeholder="输入筛选内容...">
                     <div class="parameter-list" id="parameter-list">
@@ -218,7 +177,7 @@
                         <div class="tab-content-pane">
                             <div class="tab-pane active" id="1">
                                 <div style="text-align: center;">
-                                    <img src="https://files.getquicker.net/_icons/9211E6573FDC612BDEAF8395B4E7DAD0405D7D87.png" alt="智控应用图标" style="width: 50px; height: 50px;">
+                                    <img src="https://files.getquicker.net/_icons/9211E6573FDC612BDEAF8395B4E7DAD0405D7D87.png" alt="智控应用图标" style="width: 50px; height: 50px; margin-top: 20px;">
                                     <div>智核</div>
                                 </div>
                                 <div class="right-sidebar-buttons">
@@ -228,42 +187,46 @@
                                     <button><i class="fas fa-language"></i></button>
                                     <button><i class="fas fa-code"></i></button>
                                 </div>
-                                <div style="margin-top: 10px;">
-                                    <label for="title">标题:</label>
-                                    <input type="text" id="title" name="title" placeholder="请输入标题" style="margin-left: 10px; width: calc(100% - 10px);">
+                                <div class="input-group">
+                                    <div class="section-title">标题</div>
+                                    <input type="text" id="title" name="title" placeholder="请输入标题">
                                 </div>
-                                <div style="margin-top: 10px;">
-                                    <label for="description">说明:</label>
-                                    <textarea id="description" name="description" placeholder="请输入说明" style="margin-left: 10px; width: calc(100% - 10px); height: 100px;"></textarea>
+                                <div class="input-group">
+                                    <div class="section-title">说明</div>
+                                    <textarea id="description" name="description" placeholder="请输入说明" style="height: 100px;"></textarea>
                                 </div>
                             </div>
                             <div class="tab-pane" id="2" style="display: none;">
-                                <div style="margin-top: 10px;">
-                                    <label>选项:</label><br>
+                                <div class="section-title">选项</div>
+                                <div>
                                     <input type="checkbox" id="option1" name="options" value="1">
-                                    <label for="option1">选项1</label><br>
+                                    <label for="option1">选项1</label>
+                                </div>
+                                <div>
                                     <input type="checkbox" id="option2" name="options" value="2">
-                                    <label for="option2">选项2</label><br>
+                                    <label for="option2">选项2</label>
+                                </div>
+                                <div>
                                     <input type="checkbox" id="option3" name="options" value="3">
-                                    <label for="option3">选项3</label><br>
+                                    <label for="option3">选项3</label>
                                 </div>
-                                <div style="margin-top: 10px;">
-                                    <label for="additionalInfo">附加信息:</label>
-                                    <textarea id="additionalInfo" name="additionalInfo" placeholder="请输入附加信息" style="margin-left: 10px; width: calc(100% - 10px); height: 100px;"></textarea>
-                                </div>
+                                
+                                <div class="section-title">附加信息</div>
+                                <textarea id="additionalInfo" name="additionalInfo" placeholder="请输入附加信息" style="width: 100%; height: 100px;"></textarea>
                             </div>
                             <div class="tab-pane" id="3" style="display: none;">
-                                <div style="margin-top: 10px;">
-                                    <label>选择您的选项:</label><br>
+                                <div class="section-title">选择您的选项</div>
+                                <div>
                                     <input type="checkbox" id="relation1" name="relations" value="1">
-                                    <label for="relation1">关联选项1</label><br>
-                                    <input type="checkbox" id="relation2" name="relations" value="2">
-                                    <label for="relation2">关联选项2</label><br>
-                                    <input type="checkbox" id="relation3" name="relations" value="3">
-                                    <label for="relation3">关联选项3</label><br>
+                                    <label for="relation1">关联选项1</label>
                                 </div>
-                                <div style="margin-top: 10px;">
-                                    <button type="button" style="margin-top: 10px;">设置</button>
+                                <div>
+                                    <input type="checkbox" id="relation2" name="relations" value="2">
+                                    <label for="relation2">关联选项2</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" id="relation3" name="relations" value="3">
+                                    <label for="relation3">关联选项3</label>
                                 </div>
                             </div>
                         </div>
@@ -275,347 +238,96 @@
                 </div>
             </div>
         </div>
+        
     </div>
 
-    <script>
-        // Sortable for module-list (left sidebar)
-        document.querySelectorAll('.module-list').forEach(moduleList => {
-            Sortable.create(moduleList, {
-                group: 'shared',
-                sort: false, // 禁止左侧模块排序
-                animation: 150
-            });
+    <!-- 添加全局设置按钮和面板 -->
+    <div class="global-settings">
+        <i class="fas fa-cog"></i>
+    </div>
 
-            // 筛选功能
-            const filterInput = moduleList.querySelector('.module-filter');
-            const moduleItems = Array.from(moduleList.querySelectorAll('.module-item'));
+    <div class="settings-panel">
+        <div class="settings-group">
+            <div class="settings-title">界面模式</div>
+            <div class="settings-item">
+                <select id="theme-mode" class="theme-select">
+                    <option value="custom">磨砂玻璃风格</option>
+                    <option value="eye">护眼模式</option>
+                </select>
+            </div>
+        </div>
 
-            // 处理输入框实时筛选
-            filterInput.addEventListener('input', () => {
-                const filterValue = filterInput.value.toLowerCase(); // 获取输入的值并转换为小写
-                moduleItems.forEach(item => {
-                    const text = item.textContent.toLowerCase();
-                    if (text.includes(filterValue)) {
-                        item.style.display = 'flex'; // 显示符合条件的项
-                    } else {
-                        item.style.display = 'none'; // 隐藏不符合条件的项
-                    }
-                });
-            });
+        <!-- 自定义模式设置 -->
+        <div class="mode-settings custom-mode active">
+            <div class="settings-group">
+                <div class="settings-title">界面设置</div>
+                <div class="settings-item">
+                    <label>透明度</label>
+                    <input type="range" id="opacity" min="0.1" max="1" step="0.05" value="0.1">
+                </div>
+                <div class="settings-item">
+                    <label>模糊程度</label>
+                    <input type="range" id="blur" min="0" max="20" step="1" value="10">
+                </div>
+            </div>
+            <div class="settings-group">
+                <div class="settings-title">背景设置</div>
+                <div class="settings-item bg-source">
+                    <label>背景来源</label>
+                    <div class="bg-source-options">
+                        <button class="active" data-source="bing">必应壁纸</button>
+                        <button data-source="local">本地上传</button>
+                        <button data-source="url">URL地址</button>
+                    </div>
+                    <div class="bg-input-container active" id="local-upload">
+                        <label class="custom-file-upload">
+                            <input type="file" id="bgImage" accept="image/*">
+                            选择图片
+                        </label>
+                    </div>
+                    <div class="bg-input-container" id="url-input">
+                        <input type="text" id="bgUrl" placeholder="请输入图片URL">
+                        <button id="applyBgUrl">应用</button>
+                    </div>
+                    <div class="bg-input-container" id="bing-options">
+                        <button id="getBingWallpaper">获取随机必应壁纸</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            // 添加双击事件，处理模块点击，仅在data-section为2、3时绑定
-            const parentSection = moduleList.closest('.bottom-section');
-            if (parentSection && ['2', '3'].includes(parentSection.getAttribute('data-section'))) {
-                moduleItems.forEach(item => {
-                    item.addEventListener('dblclick', () => {
-                        const moduleName = item.textContent.trim();
-                        alert(`你双击了: ${moduleName}`); // 弹窗提示
-                    });
-                });
-            }
-        });
+        <!-- 黑暗模式设置 -->
+        <div class="mode-settings dark-mode">
+            <div class="settings-group">
+                <div class="settings-title">黑暗模式设置</div>
+                <div class="settings-item">
+                    <label>组件不透明度</label>
+                    <input type="range" id="darkOpacity" min="0.1" max="1" step="0.05" value="0.2">
+                </div>
+                <div class="settings-item">
+                    <label>组件亮度</label>
+                    <input type="range" id="darkBrightness" min="0" max="30" step="1" value="15">
+                </div>
+            </div>
+        </div>
 
-        // Sortable for editor (main content)
-        Sortable.create(document.getElementById('editor'), {
-            group: {
-                name: 'shared',
-                pull: true,
-                put: true
-            },
-            animation: 150
-        });
+        <!-- 护眼模式设置 -->
+        <div class="mode-settings eye-mode">
+            <div class="settings-group">
+                <div class="settings-title">护眼模式设置</div>
+                <div class="settings-item">
+                    <label>组件不透明度</label>
+                    <input type="range" id="eyeOpacity" min="0.1" max="1" step="0.05" value="0.15">
+                </div>
+                <div class="settings-item">
+                    <label>组件亮度</label>
+                    <input type="range" id="eyeBrightness" min="60" max="100" step="1" value="85">
+                </div>
+            </div>
+        </div>
+    </div>
 
-        const parameterList = document.getElementById('parameter-list');
-        const addButton = document.getElementById('add-btn');
-        const deleteButton = document.getElementById('delete-btn');
+    <script src="script.js"></script> <!-- 引入 JavaScript 文件 -->
 
-        let lastSelectedIndex = -1;
-
-        // 为parameter-list中的每个元素添加点击事件
-        parameterList.querySelectorAll('div').forEach((item, index) => {
-            item.addEventListener('click', (event) => {
-                if (event.ctrlKey) {
-                    // 按住Ctrl键进行多选
-                    item.classList.toggle('selected');
-                } else if (event.shiftKey) {
-                    // 按住Shift键进行范围选择
-                    const currentIndex = index;
-                    const startIndex = lastSelectedIndex === -1 ? currentIndex : lastSelectedIndex;
-                    const endIndex = currentIndex;
-
-                    const range = [startIndex, endIndex].sort((a, b) => a - b);
-                    parameterList.querySelectorAll('div').forEach((el, i) => {
-                        if (i >= range[0] && i <= range[1]) {
-                            el.classList.add('selected');
-                        } else {
-                            el.classList.remove('selected');
-                        }
-                    });
-                } else {
-                    // 清除之前的选中状态
-                    parameterList.querySelectorAll('div').forEach(el => el.classList.remove('selected'));
-                    // 选中当前元素
-                    item.classList.add('selected');
-                }
-
-                lastSelectedIndex = index; // 更新最后一次选中的索引
-            });
-        });
-
-        // 添加按钮的点击事件
-        addButton.addEventListener('click', () => {
-            const newItem = document.createElement('div');
-            newItem.textContent = '新参数 ' + (parameterList.children.length + 1);
-            parameterList.appendChild(newItem);
-
-            // 为新元素添加点击事件
-            newItem.addEventListener('click', (event) => {
-                if (event.ctrlKey) {
-                    newItem.classList.toggle('selected');
-                } else if (event.shiftKey) {
-                    const currentIndex = parameterList.children.length - 1;
-                    const startIndex = lastSelectedIndex === -1 ? currentIndex : lastSelectedIndex;
-                    const endIndex = currentIndex;
-
-                    const range = [startIndex, endIndex].sort((a, b) => a - b);
-                    parameterList.querySelectorAll('div').forEach((el, i) => {
-                        if (i >= range[0] && i <= range[1]) {
-                            el.classList.add('selected');
-                        } else {
-                            el.classList.remove('selected');
-                        }
-                    });
-                } else {
-                    parameterList.querySelectorAll('div').forEach(el => el.classList.remove('selected'));
-                    newItem.classList.add('selected');
-                }
-
-                lastSelectedIndex = parameterList.children.length - 1; // 更新最后一次选中的索引
-            });
-        });
-
-        // 删除按钮的点击事件
-        deleteButton.addEventListener('click', () => {
-            const selectedItems = parameterList.querySelectorAll('div.selected');
-            selectedItems.forEach(selectedItem => {
-                parameterList.removeChild(selectedItem);
-            });
-            lastSelectedIndex = -1; // 清空选中索引
-        });
-
-        // Tab 切换逻辑
-        const tabSections = document.querySelectorAll('.top-tab');
-        const bottomSections = document.querySelectorAll('.bottom-section');
-
-        tabSections.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // 清除所有tab的active状态
-                tabSections.forEach(t => t.classList.remove('active'));
-                
-                // 激活当前tab
-                tab.classList.add('active');
-                
-                const sectionId = tab.getAttribute('data-section');
-
-                // 隐藏所有bottom-section
-                bottomSections.forEach(section => section.style.display = 'none');
-                
-                // 显示对应的bottom-section
-                const activeSection = document.querySelector(`.bottom-section[data-section="${sectionId}"]`);
-                if(activeSection) {
-                    activeSection.style.display = 'flex'; // 显示对应的section
-                }
-            });
-        });
-
-        // Button sidebar click event
-        const buttons = document.querySelectorAll('.button-sidebar button');
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                // 清除所有按钮的 active 状态
-                buttons.forEach(btn => btn.classList.remove('active'));
-                
-                // 激活当前按钮
-                button.classList.add('active');
-                
-                // 获取要显示的模块列表
-                const modulesToShow = button.getAttribute('data-modules');
-                
-                // 根据选择的按钮更新模块列表
-                updateModuleList(modulesToShow);
-            });
-        });
-
-        // 更新模块列表的函数
-        function updateModuleList(modules) {
-            const moduleLists = document.querySelectorAll('.module-list');
-            moduleLists.forEach(list => {
-                if (list.classList.contains(modules)) {
-                    list.style.display = 'block'; // 显示对应模块列表
-                } else {
-                    list.style.display = 'none'; // 隐藏其他模块列表
-                }
-            });
-        }
-
-        // 默认显示第一个按钮对应的模块
-        updateModuleList('section1');
-
-        // Tab pane 切换逻辑
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabPanes = document.querySelectorAll('.tab-pane');
-
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // 清除所有tab-button的active状态
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                
-                // 激活当前tab-button
-                button.classList.add('active');
-                
-                const paneId = button.getAttribute('data-content'); // 获取当前按钮对应的panel ID
-                
-                // 隐藏所有tab-pane
-                tabPanes.forEach(pane => {
-                    if (pane.id === paneId) {
-                        pane.style.display = 'block'; // 显示对应的pane
-                        pane.classList.add('active');
-                    } else {
-                        pane.style.display = 'none'; // 隐藏其他pane
-                        pane.classList.remove('active');
-                    }
-                });
-            });
-        });
-
-        // 默认激活第一个tab按钮
-        tabButtons[0].click(); // 触发一次点击事件以激活第一个tab
-
-        // Tab 切换和关闭的逻辑
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // 清除所有tab的active状态
-                tabs.forEach(t => t.classList.remove('active'));
-                
-                // 激活当前tab
-                tab.classList.add('active');
-                
-                const contentId = tab.getAttribute('data-content');
-
-                // 隐藏所有tab-content
-                tabContents.forEach(content => {
-                    content.classList.remove('active'); // 使用类名控制显示
-                });
-                
-                // 显示对应的tab-content
-                const activeContent = document.getElementById(`content-${contentId}`);
-                if(activeContent) {
-                    activeContent.classList.add('active'); // 使用类名控制显示
-                }
-            });
-
-            // 关闭标签的逻辑
-            const closeIcon = tab.querySelector('.close-icon');
-            closeIcon.addEventListener('click', (event) => {
-                event.stopPropagation(); // 防止事件冒泡
-                tab.remove(); // 移除标签
-                
-                const contentId = tab.getAttribute('data-content');
-                const activeContent = document.getElementById(`content-${contentId}`);
-
-                if (activeContent) {
-                    activeContent.classList.remove('active'); // 隐藏对应的内容
-                }
-
-                // 如果没有标签被激活，选择下一个标签激活
-                const remainingTabs = document.querySelectorAll('.tab');
-                if (remainingTabs.length > 0) {
-                    remainingTabs[remainingTabs.length - 1].click(); // 点击最后一个标签
-                }
-            });
-        });
-
-        // 排序下拉菜单逻辑
-        const sortBtn = document.getElementById('sort-btn');
-        const sortDropdown = document.getElementById('sort-dropdown');
-
-        sortBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // 防止点击事件冒泡
-            sortDropdown.style.display = sortDropdown.style.display === 'block' ? 'none' : 'block'; // 切换显示状态
-        });
-
-        // 隐藏下拉菜单当点击其他地方时
-        document.addEventListener('click', () => {
-            sortDropdown.style.display = 'none';
-        });
-
-        // 排序选项点击事件
-        Array.from(sortDropdown.children).forEach(item => {
-            item.addEventListener('click', (e) => {
-                console.log(`Sorting by: ${item.dataset.sort}`);
-                // 这里可以添加排序逻辑
-            });
-        });
-
-        // 筛选功能
-        const filterButton = document.getElementById('filter-btn');
-        const filterInput = document.getElementById('filter-input');
-        const parameterItems = Array.from(parameterList.children);
-        filterInput.style.display = 'none'; // 隐藏输入框
-
-        // 筛选按钮的点击事件
-        filterButton.addEventListener('click', () => {
-            if (filterInput.style.display === 'none' || !filterInput.style.display) {
-                filterInput.style.display = 'block'; // 显示输入框
-                filterInput.focus(); // 自动聚焦输入框
-            } else {
-                filterInput.style.display = 'none'; // 隐藏输入框
-                filterInput.value = ''; // 清空输入框内容
-                resetFilter(); // 重置过滤
-            }
-        });
-
-        // 处理输入框实时筛选
-        filterInput.addEventListener('input', () => {
-            const filterValue = filterInput.value.toLowerCase(); // 获取输入的值并转换为小写
-            parameterItems.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                if (text.includes(filterValue)) {
-                    item.style.display = 'block'; // 显示符合条件的项
-                } else {
-                    item.style.display = 'none'; // 隐藏不符合条件的项
-                }
-            });
-        });
-
-        // 重置筛选函数
-        function resetFilter() {
-            parameterItems.forEach(item => {
-                item.style.display = 'block'; // 显示所有项
-            });
-        }
-
-        // 处理分隔条拖动的逻辑
-        const resizer = document.querySelector('.resizer');
-        const leftSidebar = document.querySelector('.left-sidebar'); // 添加对左侧边栏的引用
-        let isResizing = false;
-
-        resizer.addEventListener('mousedown', (event) => {
-            isResizing = true; // 开始拖动
-        });
-
-        document.addEventListener('mousemove', (event) => {
-            if (!isResizing) return; // 如果没有在拖动，则返回
-            const newWidth = event.clientX; // 获取新的宽度
-            leftSidebar.style.width = `${newWidth}px`; // 修改左侧边栏的宽度
-        });
-
-        document.addEventListener('mouseup', () => {
-            isResizing = false; // 停止拖动
-        });
-    </script>
 </body>
 </html>
