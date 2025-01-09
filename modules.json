@@ -1,0 +1,104 @@
+{
+    "actionModules": {
+        "sections": [
+            {
+                "id": "section1",
+                "icon": "fa-folder",
+                "modules": [
+                    {
+                        "name": "步骤组",
+                        "icon": "fa-cube"
+                    },
+                    {
+                        "name": "打开网址",
+                        "icon": "fa-globe"
+                    },
+                    {
+                        "name": "等待网页加载",
+                        "icon": "fa-hourglass-half"
+                    }
+                ]
+            },
+            {
+                "id": "section2",
+                "icon": "fa-cog",
+                "modules": [
+                    {
+                        "name": "对话模块",
+                        "icon": "fa-comment"
+                    },
+                    {
+                        "name": "设计模块",
+                        "icon": "fa-paint-brush"
+                    }
+                ]
+            },
+            {
+                "id": "section3",
+                "icon": "fa-search",
+                "modules": [
+                    {
+                        "name": "发送模块",
+                        "icon": "fa-paperclip"
+                    }
+                ]
+            },
+            {
+                "id": "section4",
+                "icon": "fa-star",
+                "modules": [
+                    {
+                        "name": "笔记模块",
+                        "icon": "fa-video"
+                    }
+                ]
+            }
+        ]
+    },
+    "actionSubPrograms": {
+        "sections": [
+            {
+                "id": "section1",
+                "icon": "fa-comments",
+                "modules": [
+                    {
+                        "name": "对话模块",
+                        "icon": "fa-comment"
+                    },
+                    {
+                        "name": "设计模块",
+                        "icon": "fa-paint-brush"
+                    }
+                ]
+            }
+        ]
+    },
+    "commonSubPrograms": {
+        "sections": [
+            {
+                "id": "section1",
+                "icon": "fa-paper-plane",
+                "modules": [
+                    {
+                        "name": "发送模块",
+                        "icon": "fa-paperclip"
+                    }
+                ]
+            }
+        ]
+    },
+    "networkSubPrograms": {
+        "sections": [
+            {
+                "id": "section1",
+                "icon": "fa-book",
+                "modules": [
+                    {
+                        "name": "笔记模块",
+                        "icon": "fa-video"
+                    }
+                ]
+            }
+        ]
+    }
+} 
