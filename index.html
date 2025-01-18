@@ -28,63 +28,38 @@
             </div>
         </div>
 
-        <div class="bottom-section" data-section="1" style="display: flex;">
+        <div class="bottom-section" data-section="1">
             <div class="button-sidebar">
-                <button data-modules="section1" class="active"><i class="fas fa-folder"></i></button>
-                <button data-modules="section2"><i class="fas fa-cog"></i></button>
-                <button data-modules="section3"><i class="fas fa-search"></i></button>
-                <button data-modules="section4"><i class="fas fa-star"></i></button>
-                <button data-modules="section5"><i class="fas fa-history"></i></button>
+                <!-- 按钮将通过 JSON 动态生成 -->
             </div>
-            <div class="module-list section1" style="display: block;">
-                <input type="text" class="module-filter" placeholder="筛选模块..." />
+            <div class="modules-container">
                 <!-- 模块列表将通过 JSON 动态生成 -->
-            </div>
-            <div class="module-list section2">
-                <input type="text" class="module-filter" placeholder="筛选模块..." />
-                <div class="module-item" draggable="true"><i class="fas fa-comment"></i>对话模块</div>
-                <div class="module-item" draggable="true"><i class="fas fa-paint-brush"></i>设计模块</div>
-            </div>
-            <div class="module-list section3">
-                <input type="text" class="module-filter" placeholder="筛选模块..." />
-                <div class="module-item" draggable="true"><i class="fas fa-paperclip"></i>发送模块</div>
-            </div>
-            <div class="module-list section4">
-                <input type="text" class="module-filter" placeholder="筛选模块..." />
-                <div class="module-item" draggable="true"><i class="fas fa-video"></i>笔记模块</div>
             </div>
         </div>
 
         <div class="bottom-section" data-section="2">
             <div class="button-sidebar">
-                <button data-modules="section1"><i class="fas fa-comments"></i></button>
-                <button data-modules="section2"><i class="fas fa-bell"></i></button>
-                <button data-modules="section3"><i class="fas fa-user"></i></button>
+                <!-- 按钮将通过 JSON 动态生成 -->
             </div>
-            <div class="module-list section1">
-                <input type="text" class="module-filter" placeholder="筛选模块..." />
+            <div class="modules-container">
                 <!-- 模块列表将通过 JSON 动态生成 -->
             </div>
         </div>
 
         <div class="bottom-section" data-section="3">
             <div class="button-sidebar">
-                <button data-modules="section1"><i class="fas fa-paper-plane"></i></button>
-                <button data-modules="section2"><i class="fas fa-share"></i></button>
+                <!-- 按钮将通过 JSON 动态生成 -->
             </div>
-            <div class="module-list section1">
-                <input type="text" class="module-filter" placeholder="筛选模块..." />
+            <div class="modules-container">
                 <!-- 模块列表将通过 JSON 动态生成 -->
             </div>
         </div>
 
         <div class="bottom-section" data-section="4">
             <div class="button-sidebar">
-                <button data-modules="section1"><i class="fas fa-book"></i></button>
-                <button data-modules="section2"><i class="fas fa-star"></i></button>
+                <!-- 按钮将通过 JSON 动态生成 -->
             </div>
-            <div class="module-list section1">
-                <input type="text" class="module-filter" placeholder="筛选模块..." />
+            <div class="modules-container">
                 <!-- 模块列表将通过 JSON 动态生成 -->
             </div>
         </div>
@@ -224,8 +199,8 @@
                         </div>
                     </div>
                     <div style="margin-top: 20px; text-align: right;">
-                        <button style="padding: 5px 20px; background-color: #1a73e8; color: white; border: none; border-radius: 4px;">保存(S)</button>
-                        <button style="padding: 5px 20px; margin-left: 10px; background-color: #f0f0f0; border: 1px solid #ccc; border-radius: 4px;">取消</button>
+                        <button style="padding: 8px 16px; background-color: #1a73e8; color: rgb(129, 128, 128); border: none; border-radius: 4px; margin-right: 10px; backdrop-filter: blur(8px);">保存(S)</button>
+                        <button style="padding: 8px 16px; background-color: #1a73e8; color: rgb(129, 128, 128); border: none; border-radius: 4px; backdrop-filter: blur(8px);">取消</button>
                     </div>
                 </div>
             </div>
@@ -267,7 +242,6 @@
                 <div class="settings-item bg-source">
                     <label>背景来源</label>
                     <div class="bg-source-options">
-                        <button class="active" data-source="bing">必应壁纸</button>
                         <button data-source="local">本地上传</button>
                         <button data-source="url">URL地址</button>
                     </div>
@@ -280,9 +254,6 @@
                     <div class="bg-input-container" id="url-input">
                         <input type="text" id="bgUrl" placeholder="请输入图片URL">
                         <button id="applyBgUrl">应用</button>
-                    </div>
-                    <div class="bg-input-container" id="bing-options">
-                        <button id="getBingWallpaper">获取随机必应壁纸</button>
                     </div>
                 </div>
             </div>

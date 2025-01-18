@@ -6,7 +6,6 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     min-height: 100%;
-    background-image: var(--bg-image, url('https://cn.bing.com/th?id=OHR.PerseidsOregon_ZH-CN9427980491_1920x1080.jpg'));
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -633,11 +632,12 @@ input[type="text"]:focus, textarea:focus {
     --button-size: 32px;
     --accent-color: #1a73e8;
     --accent-rgb: 26, 115, 232;
+    --eye-opacity: 0;
+    --eye-brightness: 100%;
 }
 
 /* 添加背景图片和全局样式 */
 body {
-    background-image: var(--bg-image, url('https://cn.bing.com/th?id=OHR.PerseidsOregon_ZH-CN9427980491_1920x1080.jpg'));
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -1022,14 +1022,6 @@ textarea {
     transform: translateY(-2px);
 }
 
-/* 修改HTML结构，添加图标 */
-<div style="margin-top: 15px;">
-    <button type="button" class="settings-btn" aria-label="设置" title="">
-        <i class="fas fa-cog"></i>
-        <span>设置</span>
-    </button>
-</div>
-
 /* 添加模式相关的样式 */
 .mode-options {
     display: flex;
@@ -1082,8 +1074,9 @@ body.eye-mode .module-list,
 body.eye-mode .parameter-list,
 body.eye-mode .tab-content,
 body.eye-mode .settings-panel {
-    background: #E8F3E9; /* 浅绿色背景 */
-    color: #2B4B3B; /* 深绿色文字 */
+    background: rgba(232, 243, 233, var(--eye-opacity));
+    filter: brightness(var(--eye-brightness));
+    color: #2B4B3B;
     border-color: #A5C7A8;
 }
 

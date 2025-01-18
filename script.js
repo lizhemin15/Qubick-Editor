@@ -171,7 +171,7 @@ document.querySelectorAll('.module-list').forEach(moduleList => {
                                             保存
                                         </button>
                                         <button id="cancel-btn-${moduleName}" 
-                                                style="padding: 8px 16px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 4px; backdrop-filter: blur(8px);">
+                                                style="padding: 8px 16px; background-color: #1a73e8; color: white; border: none; border-radius: 4px; backdrop-filter: blur(8px);">
                                             取消
                                         </button>
                                     </div>
@@ -304,16 +304,16 @@ document.querySelectorAll('.module-list').forEach(moduleList => {
                                 `;
 
                                 dialogContent.innerHTML = `
-                                    <div style="margin-bottom: 20px; color: #333; font-size: 16px;">
+                                    <div style="margin-bottom: 20px; color: #000; font-size: 16px; font-weight: 600;">
                                         确定要删除这个模块吗？
                                     </div>
                                     <div style="text-align: right;">
                                         <button class="confirm-yes" 
-                                                style="padding: 8px 16px; background-color: #dc3545; color: white; border: none; border-radius: 4px; margin-right: 10px; backdrop-filter: blur(8px);">
+                                                style="padding: 8px 16px; background: rgba(255, 255, 255, 0.15); color: #000; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 4px; margin-right: 10px; backdrop-filter: blur(8px); font-weight: 600;">
                                             删除
                                         </button>
                                         <button class="confirm-no" 
-                                                style="padding: 8px 16px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 4px; backdrop-filter: blur(8px);">
+                                                style="padding: 8px 16px; background: rgba(255, 255, 255, 0.15); color: #000; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 4px; backdrop-filter: blur(8px); font-weight: 600;">
                                             取消
                                         </button>
                                     </div>
@@ -1046,14 +1046,6 @@ document.getElementById('applyBgUrl').addEventListener('click', () => {
     }
 });
 
-// 获取必应今日壁纸
-document.getElementById('getBingWallpaper').addEventListener('click', () => {
-    // 修改为新的随机必应壁纸URL
-    const bingUrl = 'https://bing.img.run/rand_uhd.php';
-    document.body.style.backgroundImage = `url(${bingUrl})`;
-    saveBackgroundSettings(); // 保存设置
-});
-
 // 保存背景设置到本地存储
 function saveBackgroundSettings() {
     const settings = {
@@ -1281,14 +1273,69 @@ themeSelect.addEventListener('change', () => {
     saveModeSettings();
 });
 
-// 护眼模式设置变化事件
+// 护眼模式不透明度控制
 document.getElementById('eyeOpacity').addEventListener('input', (e) => {
-    document.documentElement.style.setProperty('--eye-opacity', e.target.value);
+    const opacity = e.target.value;
+    document.documentElement.style.setProperty('--eye-opacity', opacity);
+    
+    // 实时更新所有护眼模式下的元素
+    if (document.body.classList.contains('eye-mode')) {
+        const elements = document.querySelectorAll(`
+            .glass-effect,
+            .left-sidebar,
+            .right-sidebar,
+            .editor,
+            .top-bar,
+            .tab-bar,
+            .module-item,
+            .parameter-actions button,
+            .dropdown,
+            .tab-button,
+            .button-sidebar button,
+            .button-sidebar,
+            .module-list,
+            .parameter-list,
+            .tab-content,
+            .settings-panel
+        `);
+        
+        elements.forEach(element => {
+            element.style.background = `rgba(232, 243, 233, ${opacity})`;
+        });
+    }
     saveModeSettings();
 });
 
+// 护眼模式亮度控制
 document.getElementById('eyeBrightness').addEventListener('input', (e) => {
-    document.documentElement.style.setProperty('--eye-brightness', `${e.target.value}%`);
+    const brightness = `${e.target.value}%`;
+    document.documentElement.style.setProperty('--eye-brightness', brightness);
+    
+    // 实时更新所有护眼模式下的元素
+    if (document.body.classList.contains('eye-mode')) {
+        const elements = document.querySelectorAll(`
+            .glass-effect,
+            .left-sidebar,
+            .right-sidebar,
+            .editor,
+            .top-bar,
+            .tab-bar,
+            .module-item,
+            .parameter-actions button,
+            .dropdown,
+            .tab-button,
+            .button-sidebar button,
+            .button-sidebar,
+            .module-list,
+            .parameter-list,
+            .tab-content,
+            .settings-panel
+        `);
+        
+        elements.forEach(element => {
+            element.style.filter = `brightness(${brightness})`;
+        });
+    }
     saveModeSettings();
 });
 
@@ -1318,32 +1365,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     } else {
-        // 如果没有保存的设置，默认使用磨砂玻璃风格
+        // 如果没有保存的设置，默认使用护眼模式
         const modeSelect = document.getElementById('theme-mode');
         if (modeSelect) {
-            modeSelect.value = 'custom';
-            applyModeSettings('custom');
+            modeSelect.value = 'eye';
+            applyModeSettings('eye');
             
-            // 设置默认背景图片
-            const defaultBgUrl = 'https://cn.bing.com/th?id=OHR.GeckoLeaf_ZH-CN9908456174_1920x1080.jpg';
+            // 应用护眼模式的默认设置
+            const eyeOpacity = document.getElementById('eyeOpacity');
+            const eyeBrightness = document.getElementById('eyeBrightness');
             
-            // 先设置URL输入框的值
-            const bgUrlInput = document.getElementById('bgUrl');
-            if (bgUrlInput) {
-                bgUrlInput.value = defaultBgUrl;
+            if (eyeOpacity) {
+                eyeOpacity.value = '0';
+                document.documentElement.style.setProperty('--eye-opacity', '0');
             }
             
-            // 验证并应用背景图片
-            const img = new Image();
-            img.onload = () => {
-                document.body.style.backgroundImage = `url("${defaultBgUrl}")`;
-                // 保存设置
-                saveModeSettings();
-            };
-            img.onerror = () => {
-                console.error('默认背景图片加载失败');
-            };
-            img.src = defaultBgUrl;
+            if (eyeBrightness) {
+                eyeBrightness.value = '100';
+                document.documentElement.style.setProperty('--eye-brightness', '100%');
+            }
+            
+            // 保存默认设置
+            saveModeSettings();
         }
     }
 });
@@ -1715,24 +1758,54 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('modules.json')
         .then(response => response.json())
         .then(data => {
-            // 遍历四个主要分类
+            // 遍历每个分类（actionModules, actionSubPrograms等）
             Object.entries(data).forEach(([category, categoryData], categoryIndex) => {
                 const categorySection = document.querySelector(`.bottom-section[data-section="${categoryIndex + 1}"]`);
                 if (!categorySection) return;
 
-                // 获取按钮侧边栏容器
+                // 获取按钮侧边栏和模块容器
                 const buttonSidebar = categorySection.querySelector('.button-sidebar');
-                if (buttonSidebar) {
-                    // 清空现有按钮
-                    buttonSidebar.innerHTML = '';
+                const modulesContainer = categorySection.querySelector('.modules-container');
+                
+                if (!buttonSidebar || !modulesContainer) return;
 
-                    // 创建新的按钮
+                // 清空现有内容
+                    buttonSidebar.innerHTML = '';
+                modulesContainer.innerHTML = '';
+
+                // 创建并添加按钮和对应的模块列表
                     categoryData.sections.forEach((section, index) => {
+                    // 创建按钮
                         const button = document.createElement('button');
                         button.setAttribute('data-modules', section.id);
-                        if (index === 0) button.classList.add('active');
+                    if (index === 0) {
+                        button.classList.add('active');
+                    }
                         button.innerHTML = `<i class="fas ${section.icon}"></i>`;
                         buttonSidebar.appendChild(button);
+
+                    // 创建对应的模块列表容器
+                    const moduleList = document.createElement('div');
+                    moduleList.className = `module-list ${section.id}`;
+                    moduleList.style.display = index === 0 ? 'block' : 'none';
+
+                    // 添加筛选输入框
+                    const filterInput = document.createElement('input');
+                    filterInput.type = 'text';
+                    filterInput.className = 'module-filter';
+                    filterInput.placeholder = '筛选模块...';
+                    moduleList.appendChild(filterInput);
+
+                    // 添加模块项
+                    section.modules.forEach(module => {
+                        const moduleItem = document.createElement('div');
+                        moduleItem.className = 'module-item';
+                        moduleItem.draggable = true;
+                        moduleItem.innerHTML = `<i class="fas ${module.icon}"></i>${module.name}`;
+                        moduleList.appendChild(moduleItem);
+                    });
+
+                    modulesContainer.appendChild(moduleList);
 
                         // 为按钮添加点击事件
                         button.addEventListener('click', () => {
@@ -1743,39 +1816,46 @@ document.addEventListener('DOMContentLoaded', () => {
                             button.classList.add('active');
 
                             // 隐藏所有模块列表
-                            categorySection.querySelectorAll('.module-list').forEach(list => {
+                        modulesContainer.querySelectorAll('.module-list').forEach(list => {
                                 list.style.display = 'none';
                             });
 
                             // 显示对应的模块列表
-                            const moduleList = categorySection.querySelector(`.module-list.${section.id}`);
-                            if (moduleList) {
-                                moduleList.style.display = 'block';
+                        const targetModuleList = modulesContainer.querySelector(`.module-list.${section.id}`);
+                        if (targetModuleList) {
+                            targetModuleList.style.display = 'block';
                             }
                         });
                     });
-                }
 
-                // 遍历每个section的模块
-                categoryData.sections.forEach(section => {
-                    const moduleList = categorySection.querySelector(`.module-list.${section.id}`);
-                    if (moduleList) {
-                        // 清空现有的模块（保留筛选输入框）
+                // 初始化拖拽功能
+                const moduleLists = modulesContainer.querySelectorAll('.module-list');
+                moduleLists.forEach(moduleList => {
+                    Sortable.create(moduleList, {
+                        group: {
+                            name: 'shared',
+                            pull: 'clone',
+                            put: false,
+                        },
+                        sort: false,
+                        animation: 150
+                    });
+
+                    // 初始化筛选功能
                         const filterInput = moduleList.querySelector('.module-filter');
-                        moduleList.innerHTML = '';
-                        if (filterInput) {
-                            moduleList.appendChild(filterInput);
-                        }
+                    const moduleItems = Array.from(moduleList.querySelectorAll('.module-item'));
 
-                        // 添加模块项
-                        section.modules.forEach(module => {
-                            const moduleItem = document.createElement('div');
-                            moduleItem.className = 'module-item';
-                            moduleItem.draggable = true;
-                            moduleItem.innerHTML = `<i class="fas ${module.icon}"></i>${module.name}`;
+                    filterInput.addEventListener('input', () => {
+                        const filterValue = filterInput.value.toLowerCase();
+                        moduleItems.forEach(item => {
+                            const text = item.textContent.toLowerCase();
+                            item.style.display = text.includes(filterValue) ? 'flex' : 'none';
+                        });
+                    });
 
                             // 为非动作模块添加双击事件
                             if (categoryIndex > 0) {
+                        moduleItems.forEach(moduleItem => {
                                 moduleItem.addEventListener('dblclick', () => {
                                     const moduleName = moduleItem.textContent.trim();
                                     const editorContainer = document.querySelector('.editor-container');
@@ -1784,15 +1864,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                     if (existingTabContent) {
                                         // 如果已存在同名tab，切换到该tab
-                                        const allTabContents = editorContainer.querySelectorAll('.tab-content');
-                                        allTabContents.forEach(tabContent => {
-                                            tabContent.classList.remove('active');
+                                    document.querySelectorAll('.tab-content').forEach(content => {
+                                        content.classList.remove('active');
                                         });
                                         existingTabContent.classList.add('active');
 
-                                        // 同时切换对应的tab按钮
-                                        const allTabs = tabBar.querySelectorAll('.tab');
-                                        allTabs.forEach(tab => {
+                                    tabBar.querySelectorAll('.tab').forEach(tab => {
                                             tab.classList.remove('active');
                                         });
                                         const existingTab = tabBar.querySelector(`[data-content="${moduleName}"]`);
@@ -1800,351 +1877,18 @@ document.addEventListener('DOMContentLoaded', () => {
                                             existingTab.classList.add('active');
                                         }
                                     } else {
-                                        // 隐藏初始HTML中的元素
-                                        const initialTopBar = document.querySelector('.editor-container > .top-bar');
-                                        const initialContent = document.querySelector('.editor-container > .tab-content');
-                                        const initialRightSidebar = document.querySelector('.right-sidebar-container');
-                                        
-                                        if (initialTopBar) initialTopBar.style.display = 'none';
-                                        if (initialContent) initialContent.classList.remove('active');
-                                        if (initialRightSidebar) initialRightSidebar.style.display = 'none';
-
-                                        // 创建新的tab内容
-                                        const newTabContent = document.createElement('div');
-                                        newTabContent.className = 'tab-content';
-                                        newTabContent.id = `content-${moduleName}`;
-                                        
-                                        // 创建完整的内容结构
-                                        newTabContent.innerHTML = `
-                                            <div class="content-wrapper">
-                                                <div class="editor-container">
-                                                    <div class="top-bar" style="display: flex;">
-                                                        <label for="step" style="margin-right: 10px;">步骤:</label>
-                                                        <input id="filter-step-${moduleName}" 
-                                                               type="text" 
-                                                               placeholder="" 
-                                                               style="width: 80%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px);">
-                                                        <button data-modules="section1" aria-label="执行动作" title="">
-                                                            <i class="fas fa-play"></i>
-                                                            <span>执行动作</span>
-                                                        </button>
-                                                        <button data-modules="section2" aria-label="上一步" title="">
-                                                            <i class="fas fa-undo"></i>
-                                                            <span>上一步</span>
-                                                        </button>
-                                                        <button data-modules="section3" aria-label="下一步" title="">
-                                                            <i class="fas fa-redo"></i>
-                                                            <span>下一步</span>
-                                                        </button>
-                                                        <button data-modules="section4" aria-label="保存版本" title="">
-                                                            <i class="fas fa-save"></i>
-                                                            <span>保存版本</span>
-                                                        </button>
-                                                        <button data-modules="section5" aria-label="历史版本" title="">
-                                                            <i class="fas fa-history"></i>
-                                                            <span>历史版本</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="editor" id="${moduleName}"></div>
-                                                </div>
-                                                <div class="right-sidebar-container" style="display: flex;">
-                                                    <div class="right-sidebar">
-                                                        <div class="parameter-actions">
-                                                            <button id="add-btn-${moduleName}" aria-label="添加" title="">
-                                                                <i class="fas fa-plus"></i>
-                                                                <span>添加</span>
-                                                            </button>
-                                                            <div class="dropdown-button">
-                                                                <button id="sort-btn-${moduleName}" aria-label="排序" title="">
-                                                                    <i class="fas fa-sort"></i>
-                                                                    <span>排序</span>
-                                                                </button>
-                                                                <div class="dropdown" id="sort-dropdown-${moduleName}">
-                                                                    <div class="dropdown-item" data-sort="name">名称</div>
-                                                                    <div class="dropdown-item" data-sort="type">类型</div>
-                                                                    <div class="dropdown-item" data-sort="tag-name">标签</div>
-                                                                </div>
-                                                            </div>
-                                                            <button id="filter-btn-${moduleName}" aria-label="筛选" title="">
-                                                                <i class="fas fa-filter"></i>
-                                                                <span>筛选</span>
-                                                            </button>
-                                                            <button id="delete-btn-${moduleName}" aria-label="删除" title="">
-                                                                <i class="fas fa-trash-alt"></i>
-                                                                <span>删除</span>
-                                                            </button>
-                                                        </div>
-                                                        <input type="text" 
-                                                               id="filter-input-${moduleName}" 
-                                                               class="filter-input glass-effect" 
-                                                               placeholder="输入筛选内容..."
-                                                               style="display: none; width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px);">
-                                                        <div class="parameter-list" id="parameter-list-${moduleName}" style="min-height: 200px; border: 1px dashed rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.05);">
-                                                            <!-- 清空初始内容 -->
-                                                        </div>
-                                                        
-                                                        <!-- 添加新的输入框部分 -->
-                                                        <div class="input-section" style="margin-top: 20px; padding: 15px; background: rgba(255, 255, 255, 0.1); border-radius: 8px;">
-                                                            <div class="section-title" style="font-size: 14px; font-weight: 500; margin-bottom: 15px; color: #333;">子程序信息</div>
-                                                            <div class="input-group" style="margin-bottom: 15px;">
-                                                                <label for="subprogram-name-${moduleName}" style="display: block; margin-bottom: 8px; color: #666;">子程序名称</label>
-                                                                <input type="text" 
-                                                                       id="subprogram-name-${moduleName}" 
-                                                                       class="form-input glass-effect" 
-                                                                       placeholder="请输入子程序名称"
-                                                                       style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px);">
-                                                                </div>
-                                                            <div class="input-group" style="margin-bottom: 15px;">
-                                                                <label for="subprogram-desc-${moduleName}" style="display: block; margin-bottom: 8px; color: #666;">说明</label>
-                                                                <textarea id="subprogram-desc-${moduleName}" 
-                                                                          class="form-input glass-effect" 
-                                                                          placeholder="请输入说明"
-                                                                          style="width: 100%; height: 100px; padding: 8px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); resize: vertical;"></textarea>
-                                                            </div>
-                                                            <div class="input-group" style="margin-bottom: 15px;">
-                                                                <label for="step-summary-${moduleName}" style="display: block; margin-bottom: 8px; color: #666;">步骤摘要</label>
-                                                                <input type="text" 
-                                                                       id="step-summary-${moduleName}" 
-                                                                       class="form-input glass-effect" 
-                                                                       placeholder="请输入步骤摘要"
-                                                                       style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px);">
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- 添加底部按钮 -->
-                                                        <div style="margin-top: 20px; text-align: right; padding: 15px; border-top: 1px solid rgba(255, 255, 255, 0.2);">
-                                                            <button id="confirm-btn-${moduleName}" 
-                                                                    style="padding: 8px 16px; background-color: #1a73e8; color: white; border: none; border-radius: 4px; margin-right: 10px; backdrop-filter: blur(8px);">
-                                                                保存
-                                                            </button>
-                                                            <button id="cancel-btn-${moduleName}" 
-                                                                    style="padding: 8px 16px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 4px; backdrop-filter: blur(8px);">
-                                                                取消
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        `;
-                                        
-                                        editorContainer.appendChild(newTabContent);
-
-                                        // 为新创建的编辑器绑定Sortable功能
-                                        Sortable.create(newTabContent.querySelector('.editor'), {
-                                            group: {
-                                                name: 'shared'
-                                            },
-                                            animation: 150,
-                                            onAdd: function(evt) {
-                                                const item = evt.item;
-                                                const newItem = item.cloneNode(true);
-                                                
-                                                // 添加按钮容器
-                                                const actionButtons = document.createElement('div');
-                                                actionButtons.className = 'module-action-buttons';
-                                                actionButtons.style.cssText = `
-                                                    position: absolute;
-                                                    right: 8px;
-                                                    top: 50%;
-                                                    transform: translateY(-50%);
-                                                    display: none;
-                                                    gap: 4px;
-                                                    background: rgba(255, 255, 255, 0.1);
-                                                    padding: 4px;
-                                                    border-radius: 4px;
-                                                    backdrop-filter: blur(8px);
-                                                `;
-
-                                                // 添加编辑按钮
-                                                const editButton = document.createElement('button');
-                                                editButton.className = 'module-edit-btn';
-                                                editButton.innerHTML = '<i class="fas fa-edit"></i>';
-                                                editButton.style.cssText = `
-                                                    border: none;
-                                                    background: transparent;
-                                                    color: #1a73e8;
-                                                    cursor: pointer;
-                                                    padding: 4px;
-                                                    border-radius: 4px;
-                                                    transition: background-color 0.2s;
-                                                `;
-                                                editButton.addEventListener('mouseover', () => {
-                                                    editButton.style.backgroundColor = 'rgba(26, 115, 232, 0.1)';
-                                                });
-                                                editButton.addEventListener('mouseout', () => {
-                                                    editButton.style.backgroundColor = 'transparent';
-                                                });
-
-                                                // 添加删除按钮
-                                                const deleteButton = document.createElement('button');
-                                                deleteButton.className = 'module-delete-btn';
-                                                deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
-                                                deleteButton.style.cssText = `
-                                                    border: none;
-                                                    background: transparent;
-                                                    color: #dc3545;
-                                                    cursor: pointer;
-                                                    padding: 4px;
-                                                    border-radius: 4px;
-                                                    transition: background-color 0.2s;
-                                                `;
-                                                deleteButton.addEventListener('mouseover', () => {
-                                                    deleteButton.style.backgroundColor = 'rgba(220, 53, 69, 0.1)';
-                                                });
-                                                deleteButton.addEventListener('mouseout', () => {
-                                                    deleteButton.style.backgroundColor = 'transparent';
-                                                });
-
-                                                // 添加按钮到容器
-                                                actionButtons.appendChild(editButton);
-                                                actionButtons.appendChild(deleteButton);
-
-                                                // 设置新项的样式和结构
-                                                newItem.style.position = 'relative';
-                                                newItem.appendChild(actionButtons);
-
-                                                // 添加鼠标悬停事件
-                                                newItem.addEventListener('mouseenter', () => {
-                                                    actionButtons.style.display = 'flex';
-                                                });
-                                                newItem.addEventListener('mouseleave', () => {
-                                                    actionButtons.style.display = 'none';
-                                                });
-
-                                                // 绑定双击和编辑按钮事件
-                                                const handleEdit = () => {
-                                                    const moduleName = newItem.textContent.trim();
-                                                    showEditModal(moduleName, newItem);
-                                                };
-
-                                                newItem.addEventListener('dblclick', handleEdit);
-                                                editButton.addEventListener('click', handleEdit);
-
-                                                // 修改删除按钮点击事件处理
-                                                deleteButton.addEventListener('click', () => {
-                                                    // 创建磨砂风格的确认对话框
-                                                    const confirmDialog = document.createElement('div');
-                                                    confirmDialog.className = 'confirm-dialog glass-effect';
-                                                    confirmDialog.style.cssText = `
-                                                        position: fixed;
-                                                        top: 0;
-                                                        left: 0;
-                                                        right: 0;
-                                                        bottom: 0;
-                                                        display: flex;
-                                                        align-items: center;
-                                                        justify-content: center;
-                                                        background: rgba(0, 0, 0, 0.5);
-                                                        z-index: 1000;
-                                                    `;
-
-                                                    const dialogContent = document.createElement('div');
-                                                    dialogContent.className = 'dialog-content glass-effect';
-                                                    dialogContent.style.cssText = `
-                                                        width: 300px;
-                                                        padding: 20px;
-                                                        border-radius: 12px;
-                                                        background: rgba(255, 255, 255, 0.2);
-                                                        backdrop-filter: blur(8px);
-                                                        border: 1px solid rgba(255, 255, 255, 0.3);
-                                                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                                                    `;
-
-                                                    dialogContent.innerHTML = `
-                                                        <div style="margin-bottom: 20px; color: #333; font-size: 16px;">
-                                                            确定要删除这个模块吗？
-                                                        </div>
-                                                        <div style="text-align: right;">
-                                                            <button class="confirm-yes" 
-                                                                    style="padding: 8px 16px; background-color: #dc3545; color: white; border: none; border-radius: 4px; margin-right: 10px; backdrop-filter: blur(8px);">
-                                                                删除
-                                                            </button>
-                                                            <button class="confirm-no" 
-                                                                    style="padding: 8px 16px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 4px; backdrop-filter: blur(8px);">
-                                                                取消
-                                                            </button>
-                                                        </div>
-                                                    `;
-
-                                                    confirmDialog.appendChild(dialogContent);
-                                                    document.body.appendChild(confirmDialog);
-
-                                                    // 绑定确认对话框按钮事件
-                                                    const closeDialog = () => {
-                                                        document.body.removeChild(confirmDialog);
-                                                    };
-
-                                                    // 确认按钮
-                                                    dialogContent.querySelector('.confirm-yes').addEventListener('click', () => {
-                                                        newItem.remove();
-                                                        closeDialog();
-                                                    });
-
-                                                    // 取消按钮
-                                                    dialogContent.querySelector('.confirm-no').addEventListener('click', closeDialog);
-
-                                                    // 点击对话框外部关闭
-                                                    confirmDialog.addEventListener('click', (e) => {
-                                                        if (e.target === confirmDialog) {
-                                                            closeDialog();
+                                    // 创建新的tab和内容
+                                    createNewTab(moduleName, moduleItem);
                                                         }
                                                     });
                                                 });
-
-                                                // 替换原始项
-                                                item.parentNode.replaceChild(newItem, item);
-                                            }
-                                        });
-
-                                        // 为新tab的参数列表绑定事件
-                                        initializeParameterList(moduleName);
-
-                                        // 创建新的tab按钮
-                                        const newTab = document.createElement('div');
-                                        newTab.className = 'tab';
-                                        newTab.setAttribute('data-content', moduleName);
-                                        newTab.innerHTML = `${moduleName}<span class="close-icon"><i class="fas fa-times"></i></span>`;
-                                        tabBar.appendChild(newTab);
-
-                                        // 切换到新创建的tab
-                                        const allTabContents = editorContainer.querySelectorAll('.tab-content');
-                                        allTabContents.forEach(tabContent => {
-                                            tabContent.classList.remove('active');
-                                        });
-                                        newTabContent.classList.add('active');
-
-                                        const allTabs = tabBar.querySelectorAll('.tab');
-                                        allTabs.forEach(tab => {
-                                            tab.classList.remove('active');
-                                        });
-                                        newTab.classList.add('active');
-                                        
-                                        // 绑定切换和关闭逻辑
-                                        initializeTabs('.tab', '.tab-content');
-                                    }
-                                });
-                            }
-
-                            moduleList.appendChild(moduleItem);
-                        });
                     }
                 });
             });
-
-            // 初始化拖拽功能
-            document.querySelectorAll('.module-list').forEach(moduleList => {
-                Sortable.create(moduleList, {
-                    group: {
-                        name: 'shared',
-                        pull: 'clone',
-                        put: false,
-                    },
-                    sort: false,
-                    animation: 150
-                });
-            });
         })
-        .catch(error => console.error('Error loading modules.json:', error));
+        .catch(error => {
+            console.error('Error loading modules:', error);
+        });
 });
 
 // 在 DOMContentLoaded 事件中添加主程序 editor 的初始化
@@ -2273,16 +2017,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
 
                     dialogContent.innerHTML = `
-                        <div style="margin-bottom: 20px; color: #333; font-size: 16px;">
+                        <div style="margin-bottom: 20px; color: #000; font-size: 16px; font-weight: 600;">
                             确定要删除这个模块吗？
                         </div>
                         <div style="text-align: right;">
                             <button class="confirm-yes" 
-                                    style="padding: 8px 16px; background-color: #dc3545; color: white; border: none; border-radius: 4px; margin-right: 10px; backdrop-filter: blur(8px);">
+                                    style="padding: 8px 16px; background: rgba(255, 255, 255, 0.15); color: #000; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 4px; margin-right: 10px; backdrop-filter: blur(8px); font-weight: 600;">
                                 删除
                             </button>
                             <button class="confirm-no" 
-                                    style="padding: 8px 16px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 4px; backdrop-filter: blur(8px);">
+                                    style="padding: 8px 16px; background: rgba(255, 255, 255, 0.15); color: #000; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 4px; backdrop-filter: blur(8px); font-weight: 600;">
                                 取消
                             </button>
                         </div>
